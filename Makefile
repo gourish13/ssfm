@@ -14,7 +14,7 @@ options:
 	@echo "CC = $(CC)"
 
 config.h:
-	cp config.def.h config.h
+	cp -f config.def.h config.h
 
 .c.o:
 	$(CC) -c $<
@@ -29,6 +29,7 @@ ssfm: $(OBJ)
 clean:
 	rm -f ssfm
 	rm -f *.o
+	rm config.h
 
 install: ssfm
 	mkdir -p $(DESTDIR)$(PREFIX)/bin
