@@ -1,5 +1,5 @@
 # ssfm - Simply Stupid File Manager
-# Hava a look at the LICENSE file for copyright and license details.
+# Have a look at the LICENSE file for copyright and license details.
 
 include config.mk
 
