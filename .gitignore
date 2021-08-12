@@ -54,3 +54,4 @@ dkms.conf
 # My Ignored Files
 config.h
 ssfm
+tags
