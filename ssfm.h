@@ -21,6 +21,7 @@ typedef struct {
     int size;
     int rows;
     int cols;
+    bool showhidden;
 } Menu;
 
 /* Prototypes */
@@ -29,7 +30,7 @@ void allwinrefresh(Windows win);
 int getkey();
 void setdir(const char *dir);
 int isdir(const char *dpath);
-void getdiritems(Items *items, char *dpath);
+void getdiritems(Items *items, char *dpath, bool showhidden);
 void execsh(char *cmd);
 void die(const char *errstr, ...);
 Windows draw(int termrows, int termcols);
@@ -42,3 +43,4 @@ void freeall(Menu *menu, Items *item, char *pwd);
 extern char *Start_Dir;
 extern char *Opener;
 extern char *Marker;
+extern bool ShowHidden;

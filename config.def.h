@@ -14,4 +14,10 @@ char *Start_Dir = NULL;
  */
 char *Marker = " ";
 
+/*
+ * To always show hidden files change the below 
+ * option to true.
+ */
+bool ShowHidden = false;
+
 char *Opener = "xdg-open";

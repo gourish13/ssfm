@@ -37,7 +37,7 @@ allwinrefresh(Windows win) {
 void
 draw_menu(Items *items, Menu *menu, Windows win, char *pwd) {
   
-  getdiritems(items, pwd);
+  getdiritems(items, pwd, menu->showhidden);
 
   menu->size = items->count;
   menu->dmenu = new_menu((ITEM **)items->item);
@@ -59,7 +59,8 @@ freeall(Menu *menu, Items *items, char* pwd) {
   for (int i = 0; i < items->count; i++)
     free_item(items->item[i]);
   free_menu(menu->dmenu);
-  free(pwd);
+  if (pwd)
+    free(pwd);
 }
 void 
 execsh(char *cmd) {
@@ -95,6 +96,7 @@ startfm(void) {
   win = draw(termrows, termcols);
   menu->rows = termrows - 3;
   menu->cols = 1;
+  menu->showhidden = ShowHidden;
   draw_menu(items, menu, win, pwd);
 
   int key;
@@ -117,21 +119,26 @@ startfm(void) {
         draw_menu(items, menu, win, pwd);  
       }
     }
-
     else if (key == KEY_RIGHT || key == 'l') {
       if ( !open_file_or_chdir(menu, pwd) ) {
-        freeall(menu, items, pwd);
-        pwd = getcwd(NULL, 0);
+        freeall(menu, items, NULL);
         win = draw(termrows, termcols);
         draw_menu(items, menu, win, pwd);  
       }
     }
-
     else if (key == 'g')
       menu_driver(menu->dmenu, REQ_FIRST_ITEM);
 
     else if (key == 'G')
       menu_driver(menu->dmenu, REQ_LAST_ITEM);
+
+    else if (key == 'H') {
+      menu->showhidden = !menu->showhidden;
+        freeall(menu, items, pwd);
+        pwd = getcwd(NULL, 0);
+        win = draw(termrows, termcols);
+        draw_menu(items, menu, win, pwd);  
+    }
 
     allwinrefresh(win);
   }
@@ -181,7 +188,7 @@ setdir(const char *dir) {
 }
 
 void
-getdiritems(Items *items, char *dpath) {
+getdiritems(Items *items, char *dpath, bool showhidden) {
   int pathlen = strlen(dpath);
   struct dirent *de;
   DIR *dr = opendir(dpath);
@@ -198,6 +205,9 @@ getdiritems(Items *items, char *dpath) {
   while ((de = readdir(dr)) != NULL) {
 
     if ( !strcmp(de->d_name, ".") || !strcmp(de->d_name, "..") )
+      continue;
+
+    if ( !showhidden && de->d_name[0] == '.' )
       continue;
 
     int d_name_len = strlen(de->d_name);
