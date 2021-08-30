@@ -256,8 +256,6 @@ main(int argc, const char *argv[])
     setdir(Start_Dir);
 
   startfm();
-
-  /* system("$SHELL"); */
-
+  
   return 0;
 }
