@@ -1,9 +1,5 @@
 /* Have a look at the LICENSE file for copyright and license details. */
 
-/* Macros */
-#define ARR_SIZE(arr) (sizeof(arr) / sizeof(arr[0]))
-
-
 /* Structs */
 typedef struct {
     WINDOW *menu;
