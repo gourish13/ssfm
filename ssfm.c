@@ -18,9 +18,10 @@
 Windows
 draw(int termrows, int termcols) {
   Windows win;
-  win.menu  =  newwin(termrows, termcols, 0, 0);
+  win.menu  =  newwin(termrows - 2, termcols, 1, 1);
   win.cmd   =  newwin(1, termcols, termrows - 1, 0);
   win.dir   =  newwin(1, termcols, termrows - 2, 0);
+  /* box(win.menu, 0, 0); */
   allwinrefresh(win);
   return win;
 }
@@ -38,12 +39,13 @@ draw_menu(Items *items, Menu *menu, Windows win, char *pwd) {
   
   getdiritems(items, pwd);
 
-  menu->size = items->count - 2;
-  menu->dmenu = new_menu((ITEM **)items->item + 2);
+  menu->size = items->count;
+  menu->dmenu = new_menu((ITEM **)items->item);
   menu_opts_off(menu->dmenu, O_ONEVALUE);
   menu_opts_off(menu->dmenu, O_SHOWDESC);
   set_menu_win(menu->dmenu, win.menu);
   set_menu_sub(menu->dmenu, win.menu);
+  set_menu_format(menu->dmenu, menu->rows, menu->cols);
   set_menu_mark(menu->dmenu, Marker);
   post_menu(menu->dmenu);
   wprintw(win.dir, pwd);
@@ -91,6 +93,8 @@ startfm(void) {
   getmaxyx(stdscr, termrows, termcols);
 
   win = draw(termrows, termcols);
+  menu->rows = termrows - 3;
+  menu->cols = 1;
   draw_menu(items, menu, win, pwd);
 
   int key;
