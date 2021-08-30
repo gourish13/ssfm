@@ -43,4 +43,5 @@ void freeall(Menu *menu, Items *item, char *pwd);
 extern char *Start_Dir;
 extern char *Opener;
 extern char *Marker;
+extern char *Shell;
 extern bool ShowHidden;

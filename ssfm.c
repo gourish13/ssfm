@@ -48,6 +48,8 @@ draw_menu(Items *items, Menu *menu, Windows win, char *pwd) {
   set_menu_format(menu->dmenu, menu->rows, menu->cols);
   set_menu_mark(menu->dmenu, Marker);
   post_menu(menu->dmenu);
+
+  wattron(win.dir, A_REVERSE | A_BOLD);
   wprintw(win.dir, pwd);
 
   allwinrefresh(win);
@@ -68,7 +70,7 @@ execsh(char *cmd) {
   endwin();
 
   if (cmd == NULL)
-    system("$SHELL");
+    Shell == NULL ? system("$SHELL") : system(Shell);
   else 
     system(cmd);
   
