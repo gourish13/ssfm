@@ -59,7 +59,7 @@ freeall(Menu *menu, Items *items, char* pwd) {
   for (int i = 0; i < items->count; i++)
     free_item(items->item[i]);
   free_menu(menu->dmenu);
-  if (pwd)
+  if (pwd != NULL)
     free(pwd);
 }
 void 
@@ -121,7 +121,8 @@ startfm(void) {
     }
     else if (key == KEY_RIGHT || key == 'l') {
       if ( !open_file_or_chdir(menu, pwd) ) {
-        freeall(menu, items, NULL);
+        freeall(menu, items, pwd);
+        pwd = getcwd(NULL, 0);
         win = draw(termrows, termcols);
         draw_menu(items, menu, win, pwd);  
       }
@@ -134,8 +135,7 @@ startfm(void) {
 
     else if (key == 'H') {
       menu->showhidden = !menu->showhidden;
-        freeall(menu, items, pwd);
-        pwd = getcwd(NULL, 0);
+        freeall(menu, items, NULL);
         win = draw(termrows, termcols);
         draw_menu(items, menu, win, pwd);  
     }
